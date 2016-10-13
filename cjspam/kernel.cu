@@ -590,7 +590,35 @@ public:
 		o << "rscale23=" << galaxy2.rscale.z;
 	}
 
-	void parse_state_info_string(string in)
+	__device__ void set_state_info(double* infos)
+	{
+		potential_type = 0;
+		sec_vec.r.x = infos[1];
+		sec_vec.r.y = infos[2];
+		sec_vec.r.z = infos[3];
+		sec_vec.v.x = infos[4];
+		sec_vec.v.y = infos[5];
+		sec_vec.v.z = infos[6];
+		galaxy1.mass = infos[7];
+		galaxy2.mass = infos[8];
+		galaxy1.rout = infos[9];
+		galaxy2.rout = infos[10];
+		galaxy1.phi = infos[11];
+		galaxy2.phi = infos[12];
+		galaxy1.theta = infos[13];
+		galaxy2.theta = infos[14];
+		galaxy1.epsilon = infos[15];
+		galaxy2.epsilon = infos[16];
+		galaxy1.rscale.x = infos[17];
+		galaxy1.rscale.y = infos[18];
+		galaxy1.rscale.z = infos[19];
+		galaxy2.rscale.x = infos[20];
+		galaxy2.rscale.y = infos[21];
+		galaxy2.rscale.z = infos[22];
+		use_sec_vec = true;
+	}
+
+	__device__ void parse_state_info_string(string in)
 	{
 		istringstream ss(in);
 		string token;
@@ -2167,6 +2195,9 @@ public:
 
 		// set the target parameters
 		init.default_parameters();
+
+		double infos[] = { 070, 1.0,27,27 - 1.76016,-0.40892,-4.48686,-0.2624,-0.29988,-0.53499,0.6195,0.25405,0.75273,0.45032,88.9,91.3,334.8,0.0,0.3,0.3,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0,0,0.94579,-5.23999,0.76974,0.0,1.0,1.0,0.0,0.0,0.0 };
+		init.p.set_state_info(infos);
 		init.p.galaxy1.theta = theta_min + theta_step + i;
 		init.p.galaxy1.phi = phi_min + phi_step + j;
 		//init.p.galaxy1.theta = theta_min + (theta_max - theta_min)*curand_uniform(&(init.p.state));
